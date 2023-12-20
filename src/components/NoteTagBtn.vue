@@ -17,6 +17,7 @@ button {
     font-size: 14px;
     color: gray;
     margin: 0 5px;
+    padding: 5px 0;
     border: 1px solid transparent;
     background: transparent;
     cursor: pointer;

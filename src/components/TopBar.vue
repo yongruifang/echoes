@@ -19,10 +19,14 @@ import { RouterLink } from 'vue-router'
 header {
     display: flex;
     align-items: center;
+    position: fixed;
+    width: 100%;
     padding: 5px 20px;
     /* height: 80px; */
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    z-index: 100;
 }
 
 header .logo-block {
@@ -35,6 +39,18 @@ header .logo-block {
         margin-left: 10px;
         font-size: 20px;
         font-weight: 600;
+    }
+
+    img {
+        cursor: pointer;
+        padding: 6px;
+        transition: 0.3s;
+        border-radius: 50%;
+    }
+
+    img:hover {
+        background-color: antiquewhite;
+        transform: scale(1.1);
     }
 }
 

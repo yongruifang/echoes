@@ -7,7 +7,7 @@
 </template>
 <style scoped>
 header {
-    padding: 24px 0;
+    padding: 60px 0 0 0;
     display: flex-column;
 }
 

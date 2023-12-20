@@ -20,20 +20,30 @@
             :class="currentTag === tag.name ? 'isSelected' : ''" @click="changeTag(tag)">
         </NoteTagBtn>
     </nav>
-    <main>
-        <NoteCard tag="留言" time="2023.12.20" :msg="msg" from="玛卡巴卡" :likes="0" :comments="0" />
+    <main class="card-plane">
+        <NoteCard v-for="(card, index) in cards" :key="index" :tag="card.tag" :time="card.time" :msg="card.msg"
+            :from="card.from" :likes="card.likes" :comments="card.comments" :liked="card.liked"
+            :commented="card.commented" />
     </main>
+    <Icon class="add-msg" icon="carbon:add-filled" @click="addMsg"></Icon>
+    <NoteModal :isModal="openModal" title="写留言" @close="openModal = false">
+        <template v-slot:card-content>
+            <NewCard />
+        </template>
+    </NoteModal>
 </template>
 <script setup lang="ts">
+import { Icon } from '@iconify/vue'
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import NoteTagBtn from '../components/NoteTagBtn.vue'
 import NoteCard from '../components/NoteCard.vue'
+import NoteModal from '@/components/NoteModal.vue';
+import NewCard from '@/components/NewCard.vue';
 interface Tag {
     name: string,
     param: string,
 }
-const msg = "阳光透过窗帘的缝隙，轻轻拂过你的脸庞，我在你耳边轻声说：“早安，我的世界。”此刻，岁月静好，诗意盎然"
 const tags: Tag[] = [
     { name: "全部", param: 'all' },
     { name: "留言", param: 'text' },
@@ -47,6 +57,31 @@ const tags: Tag[] = [
     { name: "秘密", param: 'secret' },
     { name: "信条", param: 'principle' },
 ]
+interface Card {
+    time: string,
+    tag: string,
+    msg: string,
+    from: string,
+    likes: number,
+    comments: number,
+    liked: boolean,
+    commented: boolean,
+    color?: string,
+}
+const cards = ref<null | Card[]>([])
+for (let i = 0; i < 20; i++) {
+    cards.value?.push({
+        time: "2023.12.20",
+        tag: "留言",
+        msg: "阳光透过窗帘的缝隙，轻轻拂过你的脸庞，我在你耳边轻声说：“早安，我的世界。”此刻，岁月静好，诗意盎然。",
+        from: "玛卡巴卡",
+        likes: 0,
+        comments: 0,
+        liked: false,
+        commented: false,
+    })
+}
+
 const currentTag = ref('')
 // 当前路由
 const route = useRoute()
@@ -70,10 +105,15 @@ onMounted(() => {
         default: console.log('404'); break;
     }
 })
+const openModal = ref(false)
+const addMsg = () => {
+    console.log('addMsg')
+    openModal.value = true
+}
 </script>
 <style scoped>
 header {
-    padding: 24px 0;
+    padding: 60px 0 0 0;
     display: flex-column;
 }
 
@@ -99,5 +139,28 @@ nav {
 
 nav::-webkit-scrollbar {
     display: none;
+}
+
+main.card-plane {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
+    grid-gap: 10px;
+    justify-content: center;
+}
+
+main .add-msg {
+    width: 40px;
+    height: 40px;
+    color: #000000b3;
+    cursor: pointer;
+    position: fixed;
+    right: 15px;
+    bottom: 50px;
+    transition: 0.3s;
+}
+
+main .add-msg:hover {
+    color: #000000;
+    transform: scale(1.1);
 }
 </style>

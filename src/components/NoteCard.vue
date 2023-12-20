@@ -14,22 +14,24 @@
         <footer>
             <div id="status">
                 <div class="like">
-                    <Icon icon="carbon:favorite"></Icon>
-                    {{ props.likes }}
+                    <Icon :icon="currentLiked ? 'carbon:favorite-filled' : 'carbon:favorite'" @click="clickLike()"></Icon>
+                    {{ currentLikes }}
                 </div>
                 <div class="comment">
-                    <Icon icon="carbon:chat-bot" />
-                    {{ props.comments }}
+                    <Icon :icon="currentCommented ? 'ant-design:message-filled' : 'ant-design:message-outlined'"
+                        @click="clickComment()" />
+                    {{ currentComments }}
                 </div>
             </div>
             <div id="from">
-                {{ props.from }}
+                -- {{ props.from }}
             </div>
         </footer>
     </div>
 </template>
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import { ref } from 'vue'
 interface Card {
     time: string,
     tag: string,
@@ -37,11 +39,33 @@ interface Card {
     from: string,
     likes: number,
     comments: number,
+    liked: boolean,
+    commented: boolean,
     color?: string,
 }
 const props = defineProps<Card>()
+const currentLikes = ref(props.likes)
+const currentComments = ref(props.comments)
+const currentLiked = ref(props.liked)
+const currentCommented = ref(props.commented)
 const limitLength = 90
 console.log(props.msg.length)
+const clickLike = () => {
+    currentLiked.value = !currentLiked.value
+    if (currentLiked.value) {
+        currentLikes.value += 1
+    } else {
+        currentLikes.value -= 1
+    }
+}
+const clickComment = () => {
+    currentCommented.value = !currentCommented.value
+    if (currentCommented.value) {
+        currentComments.value += 1
+    } else {
+        currentComments.value -= 1
+    }
+}
 </script>
 
 <style scoped>
@@ -111,6 +135,15 @@ console.log(props.msg.length)
         display: flex;
         flex-direction: row-reverse;
     }
+
+    transition: all 0.2s;
+    cursor: pointer;
+
+}
+
+.card:hover {
+    /* 向上偏移 */
+    transform: translateY(-5px);
 }
 
 /* 动态，鼠标移入尺寸放大，鼠标移除尺寸还原 */
