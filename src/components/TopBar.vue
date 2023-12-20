@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router'
     <header>
         <div class="logo-block">
             <img alt="Vue logo" class="logo" src="@/assets/moment-echoes.svg" width="50" height="50" />
-            <p>Echoes</p>
+            <p>回声</p>
         </div>
         <div class="wrapper">
             <nav>
@@ -19,8 +19,8 @@ import { RouterLink } from 'vue-router'
 header {
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    height: 80px;
+    padding: 5px 20px;
+    /* height: 80px; */
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

@@ -8,7 +8,13 @@ const router = createRouter({
     {
       path: '/',
       name: 'note',
-      component: NoteView
+      component: NoteView,
+      children: [
+        {
+          path: '/echoes/:tag',
+          component: NoteView,
+        }
+      ]
     },
     {
       path: '/photo',
