@@ -21,6 +21,7 @@
             <div>时间: {{ time() }}</div>
         </div>
         <div class="card-footer">
+            <button @click="reset">重置</button>
             <button @click="upload">上传</button>
         </div>
     </div>
@@ -48,7 +49,18 @@ const time = () => {
     const day = ts.getDay()
     return `${year}.${month}.${day}`;
 }
+const reset = () => {
+    currentColor.value = cardBgColor.pink;
+    currentTag.value = labels[0]
+    msgContent.value = ''
+    msgFrom.value = ''
+}
 const upload = () => {
+    // content, from, tag不能为空
+    if (!msgContent.value || !msgFrom.value) {
+        alert('留言或签名不能为空')
+        return
+    }
     // 组装留言
     const message: Msg = {
         color: currentColor.value.rgba,
@@ -58,6 +70,9 @@ const upload = () => {
         tag: currentTag.value.name
     }
     console.log(message)
+    // if(上传成功){
+    //     reset()
+    // }
 }
 
 </script>
@@ -68,15 +83,17 @@ const upload = () => {
 }
 
 .new-card {
-    display: flex-column;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
+    overflow: scroll;
 }
 
 .color-list {
     height: 40px;
     width: 100%;
-    margin: 0 5px;
+    margin: 5px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -165,13 +182,14 @@ const upload = () => {
 }
 
 .card-footer {
-    position: absolute;
-    right: 5px;
-    bottom: 70px;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
 
     button {
         background: none;
         border-radius: 5px;
+        margin: 0 5px;
         cursor: pointer;
     }
 

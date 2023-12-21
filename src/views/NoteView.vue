@@ -22,13 +22,20 @@
     </nav>
     <main class="card-plane">
         <NoteCard v-for="(card, index) in cards" :key="index" :tag="card.tag" :time="card.time" :msg="card.msg"
-            :from="card.from" :likes="card.likes" :comments="card.comments" :liked="card.liked"
-            :commented="card.commented" />
+            :from="card.from" :likes="card.likes" :comments="card.comments" :liked="card.liked" :commented="card.commented"
+            @click="OpenCardDetail(card)" />
     </main>
     <Icon class="add-msg" icon="carbon:add-filled" @click="addMsg"></Icon>
     <NoteModal :isModal="openModal" title="写留言" @close="openModal = false">
         <template v-slot:card-content>
             <NewCard />
+        </template>
+    </NoteModal>
+    <NoteModal :isModal="openOldModal" title="看留言" @close="openOldModal = false">
+        <template v-slot:card-content>
+            <OldCard :tag="openCard?.tag" :time="openCard?.time" :msg="openCard?.msg" :from="openCard?.from"
+                :likes="openCard?.likes" :comments="openCard?.comments" :liked="openCard?.liked"
+                :commented="openCard?.commented" />
         </template>
     </NoteModal>
 </template>
@@ -40,6 +47,7 @@ import NoteTagBtn from '../components/NoteTagBtn.vue'
 import NoteCard from '../components/NoteCard.vue'
 import NoteModal from '@/components/NoteModal.vue';
 import NewCard from '@/components/NewCard.vue';
+import OldCard from '@/components/OldCard.vue';
 interface Tag {
     name: string,
     param: string,
@@ -106,6 +114,13 @@ onMounted(() => {
     }
 })
 const openModal = ref(false)
+const openOldModal = ref(false)
+const openCard = ref<null | Card>()
+const OpenCardDetail = (card: Card) => {
+    openCard.value = card
+    openOldModal.value = true
+    console.log(card)
+}
 const addMsg = () => {
     console.log('addMsg')
     openModal.value = true
@@ -131,7 +146,6 @@ header p {
 
 nav {
     width: 100%;
-    overflow-y: hidden;
     overflow-x: auto;
     display: flex;
     justify-content: center;

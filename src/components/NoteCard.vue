@@ -49,7 +49,6 @@ const currentComments = ref(props.comments)
 const currentLiked = ref(props.liked)
 const currentCommented = ref(props.commented)
 const limitLength = 90
-console.log(props.msg.length)
 const clickLike = () => {
     currentLiked.value = !currentLiked.value
     if (currentLiked.value) {

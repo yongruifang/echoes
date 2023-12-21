@@ -35,7 +35,7 @@ const closeModal = () => {
     top: 60px;
     right: 0;
     width: 25%;
-    min-width: 240px;
+    min-width: 260px;
     height: 100%;
     background-color: #fff;
     transition: .3s;
