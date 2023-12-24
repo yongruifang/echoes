@@ -1,7 +1,7 @@
 <script setup lang="ts">
-
+import NavBar from '../components/layout/NavBar.vue'
 </script>
 
 <template>
-  <img alt="Echo logo" class="echo" src="@/assets/echo.svg" width="100" height="50" />
+  <NavBar />
 </template>
