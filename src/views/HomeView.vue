@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import NavBar from '../components/layout/NavBar.vue'
+import EchoCard from '@/components/EchoCard.vue';
 </script>
 
 <template>
-  <NavBar />
+  <EchoCard />
 </template>

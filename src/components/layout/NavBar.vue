@@ -28,6 +28,8 @@ import { RouterLink } from 'vue-router'
     justify-content: space-between;
     align-items: center;
     background: linear-gradient(rgba(76, 163, 178, 0.089), #fff);
+    padding: 0 20px;
+    margin: 0 0 10px 0;
 }
 
 ul {
