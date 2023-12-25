@@ -77,4 +77,20 @@ li {
     background-color: rgb(255, 0, 0);
     border-radius: 50%;
 }
+
+@media screen and (max-width: 768px) {
+    .nav-bar {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-element {
+        display: none;
+    }
+
+    .avatar {
+        display: none;
+    }
+}
 </style>
