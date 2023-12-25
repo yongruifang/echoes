@@ -5,13 +5,11 @@ import RegisterForm from './form/RegisterForm.vue';
 defineProps({
     openUserModal: Boolean
 })
-const hidden = "display: none"
-const show = "display: block"
 const type = ref('login')
 </script>
 <template>
-    <div class="popup-overlay" :style="openUserModal ? show : hidden"></div>
-    <div :style="openUserModal ? show : hidden" class="popup">
+    <div class="popup-overlay" :class="openUserModal ? 'active' : ''"></div>
+    <div :class="openUserModal ? 'active' : ''" class="popup">
         <div class="popup-close" @click="$emit('close')">&times;</div>
         <LoginForm v-if="type === 'login'" @register="type = 'register'" />
         <RegisterForm v-else @login="type = 'login'" />
@@ -26,23 +24,37 @@ const type = ref('login')
     height: 100%;
     background: rgba(115, 115, 115, 0.5);
     z-index: 1;
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.popup-overlay.active {
+    display: block;
 }
 
 .popup {
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: -150%;
+    transform: translate(-50%, -50%) scale(1.15);
     background: #fff;
     z-index: 2;
+    opacity: 0;
     width: 300px;
     height: 450px;
     font-family: fa;
     border-radius: 5px;
     box-shadow: 0 0 5px 0 rgb(0, 0, 0);
+    transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
 }
 
-.popup-close {
+.popup.active {
+    top: 50%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.active .popup-close {
     position: absolute;
     right: -10px;
     top: -10px;
