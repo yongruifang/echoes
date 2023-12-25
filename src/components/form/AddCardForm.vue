@@ -75,11 +75,6 @@ const upload = () => {
 </template>
 
 <style scoped>
-@font-face {
-    font-family: fa;
-    src: '@/assets/RuZiBiGe.ttf'
-}
-
 .new-card {
     display: flex;
     flex-direction: column;

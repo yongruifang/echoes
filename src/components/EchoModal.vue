@@ -24,7 +24,7 @@ const closeStyle = 'transform: translateX(100%);'
     <div class="modal" :style="props.open ? openStyle : closeStyle">
         <header class="modal-header">
             <h4>{{ props.title }}</h4>
-            <button @click="$emit('update:open', false)">x</button>
+            <button @click="$emit('update:open', false)">&times;</button>
         </header>
         <main class="modal-content">
             <slot name="modal-form" />

@@ -78,6 +78,7 @@ const props = withDefaults(defineProps<EchoCard>(), {
 .card-content {
     width: 100%;
     height: 70%;
+    font-family: 'fa';
 }
 
 .card-footer {

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import UserModal from '@/components/UserModal.vue'
+import { ref } from 'vue'
+const openUserModal = ref(false)
 </script>
 <template>
     <header>
@@ -17,9 +20,10 @@ import { RouterLink } from 'vue-router'
                     </RouterLink>
                 </li>
             </ul>
-            <div class="avatar"></div>
+            <div class="avatar" @click="openUserModal = true"></div>
         </nav>
     </header>
+    <UserModal :openUserModal="openUserModal" @close="openUserModal = false" />
 </template>
 <style scoped>
 .nav-bar {
@@ -76,6 +80,7 @@ li {
     height: 50px;
     background-color: rgb(255, 0, 0);
     border-radius: 50%;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
