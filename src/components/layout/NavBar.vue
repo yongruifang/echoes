@@ -4,6 +4,7 @@ import UserModal from '@/components/UserModal.vue'
 import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import { Icon } from '@iconify/vue'
 const openUserModal = ref(false)
 const userStore = useUserStore()
 // 计算属性，根据userStore的token判断是否登录
@@ -22,11 +23,15 @@ const clickAvatar = () => {
         openUserModal.value = true
     }
 }
+const expandMenu = ref(false)
 </script>
 <template>
     <header>
         <nav class="nav-bar">
-            <div class="logo"><img alt="Echo logo" src="@/assets/echo.svg" width="100" height="50" /></div>
+            <div class="nav-header">
+                <div class="logo"><img alt="Echo logo" src="@/assets/echo.svg" width="100" height="50" /></div>
+                <Icon icon="carbon:menu" class="toggle-expand" @click="expandMenu = !expandMenu"></Icon>
+            </div>
             <ul class="nav-element">
                 <li>
                     <RouterLink to="/">
@@ -41,6 +46,26 @@ const clickAvatar = () => {
             </ul>
             <div class="avatar" @click="clickAvatar">
                 {{ isLogin ? '退出' : '登录' }}
+            </div>
+            <!-- 下拉菜单 -->
+            <div class="dropdown" v-show="expandMenu">
+                <ul>
+                    <li>
+                        <RouterLink to="/">
+                            留言墙
+                        </RouterLink>
+                    </li>
+                    <li>
+                        <RouterLink to="/photo">
+                            照片墙
+                        </RouterLink>
+                    </li>
+                    <li>
+                        <div class="user-status" @click="clickAvatar">
+                            {{ isLogin ? '退出' : '登录' }}
+                        </div>
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>
@@ -106,18 +131,62 @@ li {
     line-height: 50px;
 }
 
+.user-status {
+    cursor: pointer;
+}
+
+.toggle-expand {
+    width: 30px;
+    height: 30px;
+    display: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    display: none;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .toggle-expand {
+        display: block;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        display: block;
+    }
+
     .nav-bar {
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
+    .nav-header {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+        align-items: center;
+        width: 100%;
+    }
+
     .nav-element {
         display: none;
     }
 
-    .avatar {
+    .nav-bar>.avatar {
         display: none;
     }
 }
