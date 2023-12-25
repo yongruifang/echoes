@@ -1,23 +1,18 @@
 import { defineStore } from 'pinia'
-
-interface UserState {
-    name: string;
-    token: string;
-}
+import { ref } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
-    const state: UserState = {
-        name: '',
-        token: ''
+    const name = ref('')
+    function setName(newName: string) {
+        name.value = newName
     }
-
-    function setName(name: string) {
-        state.name = name
+    const token = ref('')
+    function setToken(newToken: string) {
+        token.value = newToken
     }
-
-    function setToken(token: string) {
-        state.token = token
+    function logout() {
+        name.value = ''
+        token.value = ''
     }
-
-    return { state, setName, setToken }
+    return { name, setName, token, setToken, logout }
 })

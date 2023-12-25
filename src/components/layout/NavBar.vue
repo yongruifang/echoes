@@ -1,8 +1,27 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import UserModal from '@/components/UserModal.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
 const openUserModal = ref(false)
+const userStore = useUserStore()
+// 计算属性，根据userStore的token判断是否登录
+const isLogin = computed(() => {
+    const { token } = storeToRefs(userStore)
+    return token.value !== ''
+})
+const clickAvatar = () => {
+    if (isLogin.value) {
+        // 浏览器原生的confirm弹窗
+        if (window.confirm('确定要退出登录吗？')) {
+            userStore.logout()
+            console.log('已退出登录')
+        }
+    } else {
+        openUserModal.value = true
+    }
+}
 </script>
 <template>
     <header>
@@ -20,7 +39,9 @@ const openUserModal = ref(false)
                     </RouterLink>
                 </li>
             </ul>
-            <div class="avatar" @click="openUserModal = true"></div>
+            <div class="avatar" @click="clickAvatar">
+                {{ isLogin ? '退出' : '登录' }}
+            </div>
         </nav>
     </header>
     <UserModal :openUserModal="openUserModal" @close="openUserModal = false" />
@@ -81,6 +102,8 @@ li {
     background-color: rgb(255, 0, 0);
     border-radius: 50%;
     cursor: pointer;
+    text-align: center;
+    line-height: 50px;
 }
 
 @media screen and (max-width: 768px) {

@@ -11,8 +11,8 @@ const type = ref('login')
     <div class="popup-overlay" :class="openUserModal ? 'active' : ''"></div>
     <div :class="openUserModal ? 'active' : ''" class="popup">
         <div class="popup-close" @click="$emit('close')">&times;</div>
-        <LoginForm v-if="type === 'login'" @register="type = 'register'" />
-        <RegisterForm v-else @login="type = 'login'" />
+        <LoginForm v-if="type === 'login'" @register="type = 'register'" @loginSuccess="$emit('close')" />
+        <RegisterForm v-else @login="type = 'login'" @registerSuccess="type = 'login'" />
     </div>
 </template>
 <style>
