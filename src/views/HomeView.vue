@@ -2,14 +2,54 @@
 import EchoCard from '@/components/EchoCard.vue';
 import EchoModal from '@/components/EchoModal.vue';
 import AddCardForm from '@/components/form/AddCardForm.vue';
+import EditCardForm from '@/components/form/EditCardForm.vue';
 import { ref, onMounted } from 'vue';
 import { fetchMessageListApi } from '@/api/echo'
 import { useEchoStore } from '@/stores/echo'
-const openAddModal = ref(false);
-const showAddModal = () => {
-  openAddModal.value = true;
-};
+const openModal = ref(false);
+const newModal = () => {
+  openModal.value = true;
+  title.value = NEW_MODE;
+}
+const NEW_MODE = '新增留言';
+const EDIT_MODE = '编辑留言';
+const title = ref(NEW_MODE);
+// 选中的留言信息
+interface Msg {
+  _id: string;
+  color: string;
+  time: string;
+  content: string;
+  from: string;
+  tag: string;
+}
+const selectedEcho = ref<Msg>({
+  _id: '',
+  color: '',
+  time: '',
+  content: '',
+  from: '',
+  tag: ''
+});
+// 当选中留言，就注入到selectedEcho中
+const triggerEdit = (echo: any) => {
+  // console.log(echo) // 发现是proxy
+  const obj = JSON.parse(JSON.stringify(echo))
+  // console.log(obj)
+  selectedEcho.value = obj
+  title.value = EDIT_MODE;
+  openModal.value = true;
+  echoStore.setActiveId(echo._id)
+}
+const closeModal = () => {
+  openModal.value = false;
+  echoStore.setActiveId('')
+}
+
 const echoStore = useEchoStore()
+const uploadSuccess = () => {
+  isEnd.value = false;
+}
 /**
  * 触发条件：
  * 1. 在fetch过程中不能重复触发（引入isLoading变量）
@@ -78,18 +118,24 @@ onMounted(() => {
 <template>
   <!-- <EchoCard /> -->
   <main class="card-plane">
-    <EchoCard v-for="(echo, index) in echoStore.echoes" :key="index" :_id="echo._id" :color="echo.color" :time="echo.time"
-      :tag="echo.tag" :content="echo.content" :from="echo.from" />
+    <EchoCard :class="echoStore.activeId === echo._id ? 'active' : ''" v-for="(echo, index) in echoStore.echoes"
+      :key="index" :_id="echo._id" :color="echo.color" :time="echo.time" :tag="echo.tag" :content="echo.content"
+      :from="echo.from" @click="triggerEdit(echo)" />
     <!-- <button @click="infiniteScroll">无限滚动</button> -->
   </main>
   <!-- 右下角需要有一个添加按钮, 点击后弹出表单 -->
   <div class="fixed bottom-4 right-4">
-    <button class="p-4 rounded-full bg-blue-500 text-white" @click="showAddModal">+</button>
+    <button class="p-4 rounded-full bg-blue-500 text-white" @click="newModal">+</button>
   </div>
   <!-- 弹出表单 -->
-  <EchoModal title="新增留言" :open="openAddModal" @update:open="openAddModal = false">
+  <EchoModal :title="title" :open="openModal" @update:open="closeModal">
     <template v-slot:modal-form>
-      <AddCardForm />
+      <div>
+        <AddCardForm v-if="title === NEW_MODE" @upload:success="uploadSuccess" />
+        <EditCardForm v-else :_id="selectedEcho._id" :color="selectedEcho.color" :time="selectedEcho.time"
+          :tag="selectedEcho.tag" :content="selectedEcho.content" :from="selectedEcho.from" @update:success="closeModal"
+          @remove:success="closeModal" />
+      </div>
     </template>
   </EchoModal>
 </template>
@@ -126,6 +172,7 @@ onMounted(() => {
 }
 
 main.card-plane {
+  margin-top: 90px;
   display: grid;
   grid-template-columns: repeat(auto-fill, 250px);
   grid-gap: 10px;

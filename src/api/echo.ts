@@ -3,7 +3,8 @@ import { useUserStore } from '@/stores/user';
 const userStore = useUserStore()
 const addMessageApi = `${baseUrl}/message/add`;
 const getMessageListApi = `${baseUrl}/message/list`
-
+const updateMessageApi = `${baseUrl}/message/update`;
+const deleteMessageApi = `${baseUrl}/message/delete`;
 interface Message {
     _id?: string,
     color: string,
@@ -24,17 +25,38 @@ export const fetchAddMessageApi = async (message: Message) => {
     })
     return res.json();
 }
-interface getListQuery{
+export const fetchUpdateMessageApi = async (message: Message) => {
+    const res = await fetch(updateMessageApi, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': userStore.token
+        },
+        body: JSON.stringify(message)
+    })
+    return res.json();
+}
+
+interface getListQuery {
     limit?: number,
-    offset?: number   
+    offset?: number
 }
 /**
  * limit: 条数，默认是20条。
  * offset: 偏移量
  */
-export const fetchMessageListApi = async (query:getListQuery) => {
-    const {limit, offset} = query;
-    const res = await fetch(`${getMessageListApi}?limit=${limit}&offset=${offset}`,{
+export const fetchMessageListApi = async (query: getListQuery) => {
+    const { limit, offset } = query;
+    const res = await fetch(`${getMessageListApi}?limit=${limit}&offset=${offset}`, {
+        method: 'GET',
+        mode: 'cors',
+    })
+    return res.json();
+}
+
+export const fetchDeleteMessageApi = async (id: string) => {
+    const res = await fetch(`${deleteMessageApi}?_id=${id}`, {
         method: 'GET',
         mode: 'cors',
     })

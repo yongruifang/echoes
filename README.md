@@ -30,7 +30,20 @@ function() 就是 actions  (方才我用的是Lambda函数，pinia不认)
 - 浏览器提供了什么工具？
     - window.innerHeight: 返回视口的高度
     - Element.getBoundingClientRect: 计算元素边缘到视口之间的距离
-> 缝补：在isLoading时添加转圈的动画
-> 缝补：添加ScrollToTop的需求。
+
+# 无限滚动的补充
+- [ ] NoMoreData + 转圈圈
+- [ ] 添加ScrollToTop的需求。
 
 # 修饰卡片
+
+# 对卡片进行修改
+- 表单
+- 更新信息然后回馈给服务器
+- 成功之后更新pinia的存储值
+
+[MongoDB启动异常 报错 及 正确的关闭方法](https://blog.csdn.net/Algorithmguy/article/details/81977483)
+
+- z-index问题。
+想一想，为什么只能在先设置为fixed的nav-bar里面设置z-index才能生效？
+

@@ -39,7 +39,7 @@ const closeStyle = 'transform: translateX(100%);'
     width: 250px;
     height: calc(100vh - 90px);
     max-width: 90%;
-    background-color: antiquewhite;
+    background-color: #fff;
     transition: transform 0.3s ease-in-out;
     overflow-y: auto;
 }

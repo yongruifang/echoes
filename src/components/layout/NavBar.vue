@@ -72,20 +72,35 @@ const expandMenu = ref(false)
     <UserModal :openUserModal="openUserModal" @close="openUserModal = false" />
 </template>
 <style scoped>
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 799;
+}
+
 .nav-bar {
-    height: 80px;
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: linear-gradient(rgba(76, 163, 178, 0.089), #fff);
-    padding: 0 20px;
-    margin: 0 0 10px 0;
+    /* 毛玻璃效果 */
+    backdrop-filter: blur(8px);
+}
+
+.nav-header .logo {
+    margin-left: 20px;
 }
 
 ul {
     display: flex;
     gap: 30px;
     padding-right: 100px;
+    font-size: 15px;
+    font-weight: 800;
 }
 
 li {
@@ -94,6 +109,11 @@ li {
     padding: 20px;
     text-align: center;
     position: relative;
+    transition: all ease-in-out .2s;
+}
+
+li:hover {
+    transform: translate(0, -5px);
 }
 
 .nav-element a {
@@ -129,7 +149,14 @@ li {
     cursor: pointer;
     text-align: center;
     line-height: 50px;
+    margin-right: 10px;
+    transition: all ease-in-out .2s;
 }
+
+.avatar:hover {
+    transform: scale(1.1);
+}
+
 
 .user-status {
     cursor: pointer;
@@ -140,6 +167,7 @@ li {
     height: 30px;
     display: none;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .dropdown {
@@ -149,7 +177,6 @@ li {
     width: 100%;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1;
     display: none;
 
     ul {
@@ -165,6 +192,7 @@ li {
     }
 
     .dropdown {
+        overflow: hidden;
         display: block;
     }
 
@@ -180,6 +208,12 @@ li {
         margin: 10px 0;
         align-items: center;
         width: 100%;
+
+        .logo {
+            flex-grow: 2;
+            display: flex;
+            justify-content: center;
+        }
     }
 
     .nav-element {

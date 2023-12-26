@@ -1,35 +1,49 @@
 <script setup lang="ts">
-import { cardBgColorNames, cardBgColor, CardLabel } from '@/utils/data'
-import { ref } from 'vue'
-import { fetchAddMessageApi } from '@/api/echo'
-const emits = defineEmits(['upload:success'])
+import { cardBgColor, CardLabel } from '@/utils/data'
+import { ref, watch } from 'vue'
+import { fetchUpdateMessageApi, fetchDeleteMessageApi } from '@/api/echo'
+import { useEchoStore } from '@/stores/echo';
+const echoStore = useEchoStore()
+const emits = defineEmits(['update:success', 'remove:success'])
 interface Msg {
+    _id: string;
     color: string;
     time: string;
     content: string;
     from: string;
     tag: string;
 }
+const props = defineProps<Msg>()
 // 当前选中颜色
-const currentColor = ref<string>(cardBgColorNames[0]);
+const currentColor = ref(props.color)
 const labels = CardLabel.slice(1)
-const currentTag = ref(labels[0])
-const msgContent = ref('')
-const msgFrom = ref('')
-const time = () => {
+const currentTag = ref(props.tag)
+const msgContent = ref(props.content)
+const msgFrom = ref(props.from)
+// 子组件监听props变化
+watch(() => props._id, (newVal) => {
+    console.log('子组件监听props变化', newVal)
+    const { color, tag, content, from } = props
+    console.log(color, tag, content, from)
+    currentColor.value = color
+    currentTag.value = tag
+    msgContent.value = content
+    msgFrom.value = from
+})
+const computeTime = () => {
     const ts = new Date();
     const year = ts.getFullYear()
     const month = ts.getMonth()
-    const day = ts.getDay()
-    return `${year}-${month}-${day}`;
+    const date = ts.getDate()
+    return `${year}-${month + 1}-${date}`;
 }
-const reset = () => {
-    currentColor.value = cardBgColorNames[0];
-    currentTag.value = labels[0]
-    msgContent.value = ''
-    msgFrom.value = ''
-}
-const upload = async () => {
+// const reset = () => {
+//     currentColor.value = cardBgColorNames[0];
+//     currentTag.value = labels[0].name;
+//     msgContent.value = ''
+//     msgFrom.value = ''
+// }
+const update = async () => {
     // content, from, tag不能为空
     if (!msgContent.value || !msgFrom.value) {
         alert('留言或签名不能为空')
@@ -37,54 +51,70 @@ const upload = async () => {
     }
     // 组装留言
     const message: Msg = {
+        _id: props._id,
         color: currentColor.value,
-        time: time(),
+        time: computeTime(),
         content: msgContent.value,
         from: msgFrom.value || '匿名',
-        tag: currentTag.value.name
+        tag: currentTag.value
     }
-    const res = await fetchAddMessageApi(message)
-    if (res.status === 'success') {
-        console.log('上传成功')
-        emits('upload:success')
-        reset()
-    }
+    const res = await fetchUpdateMessageApi(message)
     console.log(res)
+    if (res.status === 'success') {
+        console.log('更新成功')
+        // 更新store
+        echoStore.updateEcho(message)
+        emits('update:success')
+    }
+}
+const remove = async () => {
+    const confirm = window.confirm('确定删除吗?')
+    if (confirm) {
+        const res = await fetchDeleteMessageApi(props._id)
+        console.log(res)
+        if (res.status === 'success') {
+            console.log('删除成功')
+            // 更新store
+            echoStore.deleteEcho(props._id)
+            emits('remove:success')
+        }
+    }
 }
 
 </script>
 <template>
-    <div class="new-card">
+    <div class="edit-card">
         <div class="color-list">
-            <div class="color-box" v-for="(color, index) in cardBgColor" :key="index"
+            <div class="color-box" v-for="(color, name, index) in cardBgColor" :key="index"
                 :style="{ 'background-color': color.rgb }"
                 :class="cardBgColor[currentColor].rgb === color.rgb ? 'is-active' : ''"
-                @click="currentColor = index as string">
+                @click="currentColor = name as string">
+
             </div>
         </div>
         <div class="card-content" :style="{ 'background-color': cardBgColor[currentColor].rgba }">
             <textarea placeholder="留言..." v-model="msgContent" />
-            <input type="text" placeholder="签名" v-model="msgFrom" @keyup.enter="upload" />
+            <input type="text" placeholder="签名" v-model="msgFrom" @keyup.enter="update" />
         </div>
         <div class="card-tag">
-            <p>选择标签: {{ currentTag.name }}</p>
+            <p>选择标签: {{ currentTag }}</p>
             <div class="tag-box">
                 <span class="tag-name" v-for="(label, index) in labels" :key="index"
-                    :class="[label.name === currentTag.name ? 'is-active' : '']" @click="currentTag = label">
+                    :class="[label.name === currentTag ? 'is-active' : '']" @click="currentTag = label.name">
                     {{ label.name }}
                 </span>
             </div>
-            <div style="display:none">时间: {{ time() }}</div>
+            <div style="display:none">时间: {{ computeTime() }}</div>
         </div>
         <div class="card-footer">
-            <button @click="reset">重置</button>
-            <button @click="upload">上传</button>
+            <button @click="remove">删除</button>
+            <button @click="update">更新</button>
         </div>
     </div>
 </template>
 
 <style scoped>
-.new-card {
+.edit-card {
     display: flex;
     flex-direction: column;
     width: 100%;

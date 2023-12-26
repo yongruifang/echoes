@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { cardBgColor } from '@/utils/data'
-
+import { computed } from 'vue'
 interface EchoCard {
     _id?: string;
     color: string;
@@ -21,10 +21,16 @@ const props = withDefaults(defineProps<EchoCard>(), {
     likes: 0,
     comments: 0,
 })
-const cardColor = cardBgColor[props.color].rgba;
-const styleObject = {
-    backgroundColor: cardColor,
-}
+// const cardColor = cardBgColor[props.color].rgba;
+// const styleObject = {
+//     backgroundColor: cardColor,
+// } // 缺陷：当父组件传入的props.color变化时，子组件的styleObject不会变化
+const styleObject = computed(() => {
+    const cardColor = cardBgColor[props.color].rgba;
+    return {
+        backgroundColor: cardColor,
+    }
+})
 </script>
 <template>
     <!-- {{ props }} -->
@@ -74,6 +80,16 @@ const styleObject = {
     margin: 0.5rem;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: scale 0.3s ease-in-out;
+}
+
+.card.active {
+    border: 2px solid rgba(76, 162, 178, 0.575);
+}
+
+.card:hover {
+    transform: scale(1.05);
 }
 
 .card-header-title {

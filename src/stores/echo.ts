@@ -10,19 +10,29 @@ interface Message {
     tag: string,
 }
 
-export const useEchoStore = defineStore('echo', ()=>{
+export const useEchoStore = defineStore('echo', () => {
     const echoes = ref<Message[]>([])
-    function setEchoes(newEchoes: Message[]){
+    const activeId = ref<string>('')
+    function setEchoes(newEchoes: Message[]) {
         echoes.value = newEchoes;
-    }   
-    function appendEchoes(newEchoes: Message[]){
+    }
+    function appendEchoes(newEchoes: Message[]) {
         echoes.value.push(...newEchoes)
     }
-    function updateEcho(id: string){
-        // update
+    function updateEcho(Echo: Message) {
+        // 通过_id找到对应的echo
+        const index = echoes.value.findIndex((item) => item._id === Echo._id)
+        console.log('通过_id找到对应的echo', index)
+        // 更新echo
+        echoes.value[index] = Echo;
     }
-    function deleteEcho(id: string){
+    function deleteEcho(id: string) {
         // delete
+        const index = echoes.value.findIndex((item) => item._id === id)
+        echoes.value.splice(index, 1)
     }
-    return {echoes, setEchoes, appendEchoes, updateEcho, deleteEcho}
+    function setActiveId(id: string) {
+        activeId.value = id;
+    }
+    return { activeId, echoes, setEchoes, appendEchoes, updateEcho, deleteEcho, setActiveId }
 })
