@@ -5,6 +5,12 @@ import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { Icon } from '@iconify/vue'
+defineProps({
+    active: {
+        type: String,
+        default: '/'
+    }
+})
 const openUserModal = ref(false)
 const userStore = useUserStore()
 // 计算属性，根据userStore的token判断是否登录
@@ -33,12 +39,12 @@ const expandMenu = ref(false)
                 <Icon icon="carbon:menu" class="toggle-expand" @click="expandMenu = !expandMenu"></Icon>
             </div>
             <ul class="nav-element">
-                <li>
+                <li :class="active === '/' ? 'active' : ''">
                     <RouterLink to="/">
                         留言墙
                     </RouterLink>
                 </li>
-                <li>
+                <li :class="active === '/photo' ? 'active' : ''">
                     <RouterLink to="/photo">
                         照片墙
                     </RouterLink>
@@ -125,6 +131,21 @@ li:hover {
     color: rgba(76, 162, 178, 1);
 }
 
+.nav-element li.active a {
+    font-weight: 900;
+    color: rgba(76, 163, 178, 0.935);
+}
+
+/* .nav-element li.active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(76, 162, 178, 0.575);
+    transition: all ease-in-out .2s;
+} */
 .nav-element li::after {
     content: '';
     position: absolute;

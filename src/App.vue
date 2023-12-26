@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import NavBar from './components/layout/NavBar.vue';
+import router from '@/router'
+const path = ref('/')
+router.beforeEach((to) => {
+  // console.log('router', to, from)
+  path.value = to.path
+})
 </script>
 
 <template>
-  <NavBar />
+  <NavBar :active="path" />
   <RouterView />
 </template>
 
