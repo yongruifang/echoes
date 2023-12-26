@@ -20,4 +20,17 @@
 ref() 就是 state 属性
 computed() 就是 getters
 function() 就是 actions  (方才我用的是Lambda函数，pinia不认)
-'```
+
+# 添加留言的API
+
+
+# 如何计算 屏幕与容器边缘的距离
+- 如果有api可以直接获取元素底部到屏幕底部的距离？
+    - 有吗？没有
+- 浏览器提供了什么工具？
+    - window.innerHeight: 返回视口的高度
+    - Element.getBoundingClientRect: 计算元素边缘到视口之间的距离
+> 缝补：在isLoading时添加转圈的动画
+> 缝补：添加ScrollToTop的需求。
+
+# 修饰卡片

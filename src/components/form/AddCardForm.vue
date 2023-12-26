@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cardBgColorNames, cardBgColor, CardLabel } from '@/utils/data'
 import { ref } from 'vue'
+import { fetchAddMessageApi } from '@/api/echo'
 interface Msg {
     color: string;
     time: string;
@@ -9,7 +10,7 @@ interface Msg {
     tag: string;
 }
 // 当前选中颜色
-const currentColor = ref(cardBgColorNames[0]);
+const currentColor = ref<string>(cardBgColorNames[0]);
 const labels = CardLabel.slice(1)
 const currentTag = ref(labels[0])
 const msgContent = ref('')
@@ -27,7 +28,7 @@ const reset = () => {
     msgContent.value = ''
     msgFrom.value = ''
 }
-const upload = () => {
+const upload = async() => {
     // content, from, tag不能为空
     if (!msgContent.value || !msgFrom.value) {
         alert('留言或签名不能为空')
@@ -42,6 +43,8 @@ const upload = () => {
         tag: currentTag.value.name
     }
     console.log(message)
+    const res = await fetchAddMessageApi(message)
+    console.log(res)
 }
 
 </script>
@@ -50,7 +53,7 @@ const upload = () => {
         <div class="color-list">
             <div class="color-box" v-for="(color, index) in cardBgColor" :key="index"
                 :style="{ 'background-color': color.rgb }"
-                :class="cardBgColor[currentColor].rgb === color.rgb ? 'is-active' : ''" @click="currentColor = index">
+                :class="cardBgColor[currentColor].rgb === color.rgb ? 'is-active' : ''" @click="currentColor=index">
             </div>
         </div>
         <div class="card-content" :style="{ 'background-color': cardBgColor[currentColor].rgba }">
@@ -65,7 +68,7 @@ const upload = () => {
                     {{ label.name }}
                 </span>
             </div>
-            <div style="display:none">时间: {{ time().replaceAll('-', '.') }}</div>
+            <div style="display:none">时间: {{ time() }}</div>
         </div>
         <div class="card-footer">
             <button @click="reset">重置</button>

@@ -7,7 +7,21 @@ export const cardBgColorNames = [
     'purple',
     'gray'
 ]
-export const cardBgColor = {
+interface BgColor {
+    rgb: string,
+    rgba: string,
+}
+//解决 元素隐式具有 “any“ 类型，因为类型为 “string“ 的表达式不能用于索引类型 “Object“
+interface CardBgColor {
+    pink: BgColor,
+    yellow: BgColor,
+    blue: BgColor,
+    green: BgColor,
+    purple: BgColor,
+    gray: BgColor,
+    [key: string]: BgColor,
+}
+export const cardBgColor: CardBgColor = {
     pink: {
         rgb: 'rgb(252,175,162)',
         rgba: 'rgba(252,175,162,0.3)'
@@ -49,6 +63,7 @@ export const CardLabel: Tag[] = [
     { name: "友情", param: 'friend' },
     { name: "秘密", param: 'secret' },
     { name: "信条", param: 'principle' },
+    { name: "感悟", param: 'gnosis'}
 ]
 
 // 墙
