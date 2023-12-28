@@ -9,7 +9,7 @@ const userStore = useUserStore()
 const emits = defineEmits(['register', 'loginSuccess'])
 const memberLogin = async () => {
     const res = await fetchLoginApi(name.value, password.value);
-    userStore.setName(res.data.name)
+    userStore.setName(name.value)
     userStore.setToken(res.token)
     // 通知父组件登录成功
     emits('loginSuccess')
