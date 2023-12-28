@@ -14,12 +14,11 @@
 
 # vite中如何使用环境变量？
 
-- new Q: pinia 的问题，setToken之后, 在vue devtool中看不到, 在localStorage中也没有看到
-```js
-在 Setup Store 中：
-ref() 就是 state 属性
-computed() 就是 getters
-function() 就是 actions  (方才我用的是Lambda函数，pinia不认)
+- new Q: pinia 的问题，setToken之后, 在vue devtool中看不到?(已解决)
+> 在 Setup Store 中：
+> ref() 就是 state 属性
+> computed() 就是 getters
+> function() 就是 actions  (方才我用的是Lambda函数，pinia不认)
 
 # 添加留言的API
 
@@ -47,3 +46,18 @@ function() 就是 actions  (方才我用的是Lambda函数，pinia不认)
 - z-index问题。
 想一想，为什么只能在先设置为fixed的nav-bar里面设置z-index才能生效？
 
+# 错误提示 + 页面状态提示的丰富
+- 成功失败的提示
+    - 注册
+    - 登录
+    - 调用CRUD
+# 收藏 + 评论 板块如何解决？
+
+# 创新点
+- kafka, rabbitMQ
+- Socket.io 搞一个聊天室
+- 图片（文件的CRUD）
+
+# 最终目的
+- 制作视频脚本
+- 创作代码视频
