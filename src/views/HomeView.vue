@@ -7,6 +7,17 @@ import { ref, onMounted } from 'vue';
 import { fetchMessageListApi } from '@/api/echo'
 import { useEchoStore } from '@/stores/echo'
 import EchoAlert from '@/components/common/EchoAlert.vue';
+const AlertType = {
+  ERROR: 'error',
+  INFO: 'info',
+  SUCCESS: 'success'
+}
+const showAlert = ref(true);
+const toggleAlert = () => {
+  showAlert.value = !showAlert.value;
+}
+const alertType = ref(AlertType.INFO);
+const alertMsg = ref('hello');
 const openModal = ref(false);
 const newModal = () => {
   openModal.value = true;
@@ -141,8 +152,9 @@ onMounted(() => {
       </div>
     </template>
   </EchoModal>
+  <button @click="toggleAlert">toggleAlert</button>
   <Teleport to="#notification">
-    <EchoAlert :show=true type="error" message="hello"></EchoAlert>
+    <EchoAlert :show="showAlert" :type="alertType" :message="alertMsg" @close="toggleAlert"></EchoAlert>
   </Teleport>
 </template>
 <style scoped>
