@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import NavBar from './components/layout/NavBar.vue';
 import router from '@/router'
 import { useUserStore } from './stores/user';
 const userStore = useUserStore()
 const path = ref('/')
 router.beforeEach((to) => {
-  // console.log('router', to, from)
   path.value = to.path
 })
-const isLogin = ref(false)
-onMounted(() => {
+const checkLogin = () => {
   if (userStore.token) {
-    isLogin.value = true
+    return true
+  } else if (localStorage.getItem('token')) {
+    userStore.setToken(localStorage.getItem('token')!)
+    userStore.setName(localStorage.getItem('name')!)
+    return true
   }
-})
+  return false
+}
+const isLogin = checkLogin()
 </script>
 
 <template>
-  <NavBar :active="path" :logged="isLogin" />
+  <NavBar :active="path" :logged=isLogin />
   <RouterView />
 </template>
 

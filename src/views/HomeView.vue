@@ -6,10 +6,11 @@ import EditCardForm from '@/components/form/EditCardForm.vue';
 import { ref, onMounted } from 'vue';
 import { fetchMessageListApi } from '@/api/echo'
 import { useEchoStore } from '@/stores/echo'
+import EchoLoading from '@/components/common/EchoLoading.vue';
 import EchoAlert from '@/components/common/EchoAlert.vue';
 import { useAlertStore } from '@/stores/alert';
 const alertStore = useAlertStore()
-const emits = defineEmits(['failed'])
+defineEmits(['failed'])
 type AlertType = "success" | "error" | "warning" | "info";
 type AlertArgs = {
   type: AlertType;
@@ -132,6 +133,12 @@ onMounted(() => {
     const distance = container.getBoundingClientRect().bottom - window.innerHeight;
     if (!isLoading.value && !isEnd.value && distance < triggerDistance) {
       isLoading.value = true;
+      console.log('fetching...')
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('')
+        }, 3000);
+      })
       const res = await fetchMessageListApi({ limit: 5, offset: echoStore.echoes.length })
       console.log(res.data)
       if (res.data.length === 0) isEnd.value = true;
@@ -176,7 +183,10 @@ onMounted(() => {
       :auto-close="alertStore.autoClose" @close="alertStore.toggleClose">
     </EchoAlert>
   </Teleport>
-  <div v-show="isLoading">isLoading</div>
+  <div v-show="isLoading" class="loading-spinner">
+    <EchoLoading />
+    <p>加载中...</p>
+  </div>
   <div v-show="isEnd" style="text-align:center; font-size: 0.8rem; color: gray; margin: 10px 0">No more Data</div>
 </template>
 <style scoped>
@@ -217,6 +227,15 @@ main.card-plane {
   grid-template-columns: repeat(auto-fill, 250px);
   grid-gap: 10px;
   justify-content: center;
+}
+
+.loading-spinner {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
 }
 </style>
 ```

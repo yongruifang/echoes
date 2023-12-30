@@ -39,7 +39,11 @@ const clickAvatar = () => {
 const expandMenu = ref(false)
 onMounted(() => {
     if (props.logged === false) {
+        console.log('没有登录信息')
         openUserModal.value = true
+    } else {
+        console.log('有登录信息')
+        openUserModal.value = false
     }
 })
 </script>

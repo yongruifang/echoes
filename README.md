@@ -31,7 +31,7 @@
     - Element.getBoundingClientRect: 计算元素边缘到视口之间的距离
 
 # 无限滚动的补充
-- [ ] NoMoreData + 转圈圈
+- [x] NoMoreData√ + 转圈圈(w3schools.com/howto_css_loader.asp)
 - [ ] 添加ScrollToTop的需求。
 
 # 修饰卡片
