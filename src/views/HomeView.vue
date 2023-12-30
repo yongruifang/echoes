@@ -128,7 +128,6 @@ onMounted(() => {
     }
   }
   const infiniteScroll = async () => {
-    console.log('trigger infiniteScroll')
     const container = document.getElementsByClassName('card-plane')[0]
     const distance = container.getBoundingClientRect().bottom - window.innerHeight;
     if (!isLoading.value && !isEnd.value && distance < triggerDistance) {
@@ -139,8 +138,7 @@ onMounted(() => {
           resolve('')
         }, 3000);
       })
-      const res = await fetchMessageListApi({ limit: 5, offset: echoStore.echoes.length })
-      console.log(res.data)
+      const res = await fetchMessageListApi({ limit: 20, offset: echoStore.echoes.length })
       if (res.data.length === 0) isEnd.value = true;
       echoStore.appendEchoes(res.data)
       isLoading.value = false;
@@ -149,7 +147,7 @@ onMounted(() => {
       }
     }
   }
-  window.addEventListener('scroll', throttle(infiniteScroll, 1000))
+  window.addEventListener('scroll', throttle(infiniteScroll, 50))
 })
 
 </script>
