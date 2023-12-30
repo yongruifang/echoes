@@ -2,7 +2,7 @@
 import { cardBgColorNames, cardBgColor, CardLabel } from '@/utils/data'
 import { ref } from 'vue'
 import { fetchAddMessageApi } from '@/api/echo'
-const emits = defineEmits(['upload:success'])
+const emits = defineEmits(['upload:success', 'upload:error'])
 interface Msg {
     color: string;
     time: string;
@@ -48,6 +48,8 @@ const upload = async () => {
         console.log('上传成功')
         emits('upload:success')
         reset()
+    } else {
+        emits('upload:error', res)
     }
     console.log(res)
 }

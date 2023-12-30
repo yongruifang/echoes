@@ -6,9 +6,13 @@ import { useUserStore } from '@/stores/user';
 const name = ref('')
 const password = ref('')
 const userStore = useUserStore()
-const emits = defineEmits(['register', 'loginSuccess'])
+const emits = defineEmits(['register', 'loginSuccess', 'failed'])
 const memberLogin = async () => {
     const res = await fetchLoginApi(name.value, password.value);
+    if (res.status !== 'success') {
+        emits('failed', res)
+        return
+    }
     userStore.setName(name.value)
     userStore.setToken(res.token)
     // 通知父组件登录成功

@@ -2,17 +2,32 @@
 import { ref } from 'vue'
 import LoginForm from './form/LoginForm.vue';
 import RegisterForm from './form/RegisterForm.vue';
+import { useAlertStore } from '@/stores/alert';
+const alertStore = useAlertStore()
 defineProps({
     openUserModal: Boolean
 })
+const emits = defineEmits(['close', 'failed'])
 const type = ref('login')
+const handleFailed = (res: any) => {
+    alertStore.setAlert({ type: 'error', message: res.message, show: true, autoClose: true })
+}
+const loginSuccess = () => {
+    alertStore.setAlert({ type: 'success', message: '登录成功', show: true, autoClose: true })
+    emits('close')
+}
+const RegisterSuccess = () => {
+    alertStore.setAlert({ type: 'success', message: '注册成功, 请登录', show: true, autoClose: true })
+    type.value = 'login'
+}
 </script>
 <template>
     <div class="popup-overlay" :class="openUserModal ? 'active' : ''"></div>
     <div :class="openUserModal ? 'active' : ''" class="popup">
         <div class="popup-close" @click="$emit('close')">&times;</div>
-        <LoginForm v-if="type === 'login'" @register="type = 'register'" @loginSuccess="$emit('close')" />
-        <RegisterForm v-else @login="type = 'login'" @registerSuccess="type = 'login'" />
+        <LoginForm v-if="type === 'login'" @register="type = 'register'" @loginSuccess="loginSuccess"
+            @failed="handleFailed" />
+        <RegisterForm v-else @login="type = 'login'" @registerSuccess="RegisterSuccess" @failed="handleFailed" />
     </div>
 </template>
 <style>
@@ -34,7 +49,7 @@ const type = ref('login')
 }
 
 .popup {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: -150%;
     transform: translate(-50%, -50%) scale(1.15);

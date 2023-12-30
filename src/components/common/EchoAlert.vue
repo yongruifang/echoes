@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { computed, watch } from 'vue';
+import { computed, watch, onBeforeUpdate, onUpdated } from 'vue';
 const props = defineProps({
     type: String,
     message: String,
-    show: Boolean
+    show: Boolean,
+    autoClose: Boolean
 })
 const emits = defineEmits(['close'])
 const iconType = computed(() => {
@@ -31,9 +32,34 @@ const colorType = computed(() => {
             return '#409eff'
     }
 })
-watch(() => props.show, (val) => {
-    if (val) {
-        setTimeout(() => {
+const title = computed(() => {
+    switch (props.type) {
+        case 'error':
+            return '错误'
+        case 'info':
+            return '提示'
+        case 'success':
+            return '成功'
+        default:
+            return '提示'
+    }
+})
+let timer: any = null
+// watch(() => props.show, (val) => {
+//     if (val && props.autoClose) {
+//         timer = setTimeout(() => {
+//             emits('close')
+//         }, 3000)
+//     }
+// })
+onBeforeUpdate(() => {
+    console.log('onBeforeUpdate')
+    clearTimeout(timer)
+})
+onUpdated(() => {
+    console.log('onUpdated')
+    if (props.show && props.autoClose) {
+        timer = setTimeout(() => {
             emits('close')
         }, 3000)
     }
@@ -45,7 +71,7 @@ watch(() => props.show, (val) => {
         <div v-if="show" class="notification-container">
             <div class="header">
                 <Icon :icon="iconType" :style="{ 'color': colorType }" />
-                <div class="title">{{ type }}</div>
+                <div class="title">{{ title }}</div>
                 <Icon icon="material-symbols:close" class="close" @click="emits('close')"></Icon>
             </div>
             <div class="content">{{ message }}</div>
@@ -57,7 +83,7 @@ watch(() => props.show, (val) => {
 .notification-container {
     position: fixed;
     bottom: 1rem;
-    right: 1rem;
+    left: 1rem;
     width: 18rem;
     height: 100px;
     background-color: #fff;
@@ -69,7 +95,7 @@ watch(() => props.show, (val) => {
 }
 
 .notification-enter-from {
-    translate: 100% 0;
+    translate: -100% 0;
 }
 
 .notification-enter-to {
@@ -81,7 +107,7 @@ watch(() => props.show, (val) => {
 }
 
 .notification-leave-to {
-    translate: 100% 0;
+    translate: -100% 0;
 }
 
 .header {

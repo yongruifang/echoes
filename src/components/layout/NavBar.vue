@@ -5,6 +5,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { Icon } from '@iconify/vue'
+import { useAlertStore } from '@/stores/alert';
+const alertStore = useAlertStore()
 const props = defineProps({
     active: {
         type: String,
@@ -28,6 +30,7 @@ const clickAvatar = () => {
         if (window.confirm('确定要退出登录吗？')) {
             userStore.logout()
             console.log('已退出登录')
+            alertStore.setAlert({ type: 'success', message: '已退出登录', show: true, autoClose: true })
         }
     } else {
         openUserModal.value = true

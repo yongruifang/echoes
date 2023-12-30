@@ -7,17 +7,24 @@ import { ref, onMounted } from 'vue';
 import { fetchMessageListApi } from '@/api/echo'
 import { useEchoStore } from '@/stores/echo'
 import EchoAlert from '@/components/common/EchoAlert.vue';
-const AlertType = {
-  ERROR: 'error',
-  INFO: 'info',
-  SUCCESS: 'success'
+import { useAlertStore } from '@/stores/alert';
+const alertStore = useAlertStore()
+const emits = defineEmits(['failed'])
+type AlertType = "success" | "error" | "warning" | "info";
+type AlertArgs = {
+  type: AlertType;
+  message: string;
+  show: boolean;
+  autoClose: boolean;
 }
-const showAlert = ref(true);
-const toggleAlert = () => {
-  showAlert.value = !showAlert.value;
+const openAlert = (args: AlertArgs) => {
+  alertStore.setAlert(args)
 }
-const alertType = ref(AlertType.INFO);
-const alertMsg = ref('hello');
+const handleMsg = (res: any) => {
+  const type = res.status;
+  const msg = res.message;
+  openAlert({ type: type, message: msg, show: true, autoClose: true })
+}
 const openModal = ref(false);
 const newModal = () => {
   openModal.value = true;
@@ -60,7 +67,16 @@ const closeModal = () => {
 
 const echoStore = useEchoStore()
 const uploadSuccess = () => {
-  isEnd.value = false;
+  if (isEnd.value) isEnd.value = false;
+  alertStore.setAlert({ type: 'success', message: '上传成功', show: true, autoClose: true })
+}
+const updateSuccess = () => {
+  alertStore.setAlert({ type: 'success', message: '更新成功', show: true, autoClose: true })
+  closeModal()
+}
+const removeSuccess = () => {
+  alertStore.setAlert({ type: 'success', message: '删除成功', show: true, autoClose: true })
+  closeModal()
 }
 /**
  * 触发条件：
@@ -71,14 +87,13 @@ const uploadSuccess = () => {
 const isLoading = ref(false)
 const isEnd = ref(false)
 const triggerDistance = 200;
-
 onMounted(() => {
   if (echoStore.echoes.length === 0) {
     fetchMessageListApi({ limit: 20, offset: 0 }).then((res) => {
       console.log(res.data)
       echoStore.setEchoes(res.data)
     }).catch((err) => {
-      console.log(err)
+      openAlert({ type: "error", message: err.message, show: true, autoClose: false })
     })
   }
   // debounce
@@ -122,6 +137,9 @@ onMounted(() => {
       if (res.data.length === 0) isEnd.value = true;
       echoStore.appendEchoes(res.data)
       isLoading.value = false;
+      if (res.status === 'error') {
+        openAlert({ type: "error", message: res.message, show: true, autoClose: false })
+      }
     }
   }
   window.addEventListener('scroll', throttle(infiniteScroll, 1000))
@@ -145,17 +163,21 @@ onMounted(() => {
   <EchoModal :title="title" :open="openModal" @update:open="closeModal">
     <template v-slot:modal-form>
       <div>
-        <AddCardForm v-if="title === NEW_MODE" @upload:success="uploadSuccess" />
+        <AddCardForm v-if="title === NEW_MODE" @upload:success="uploadSuccess" @upload:error="handleMsg" />
         <EditCardForm v-else :_id="selectedEcho._id" :color="selectedEcho.color" :time="selectedEcho.time"
-          :tag="selectedEcho.tag" :content="selectedEcho.content" :from="selectedEcho.from" @update:success="closeModal"
-          @remove:success="closeModal" />
+          :tag="selectedEcho.tag" :content="selectedEcho.content" :from="selectedEcho.from"
+          @update:success="updateSuccess" @remove:success="removeSuccess" @failed="handleMsg" />
       </div>
     </template>
   </EchoModal>
-  <button @click="toggleAlert">toggleAlert</button>
+  <!-- <button @click="toggleAlert">toggleAlert</button> -->
   <Teleport to="#notification">
-    <EchoAlert :show="showAlert" :type="alertType" :message="alertMsg" @close="toggleAlert"></EchoAlert>
+    <EchoAlert :show="alertStore.show" :type="alertStore.type" :message="alertStore.message"
+      :auto-close="alertStore.autoClose" @close="alertStore.toggleClose">
+    </EchoAlert>
   </Teleport>
+  <div v-show="isLoading">isLoading</div>
+  <div v-show="isEnd" style="text-align:center; font-size: 0.8rem; color: gray; margin: 10px 0">No more Data</div>
 </template>
 <style scoped>
 .fixed {

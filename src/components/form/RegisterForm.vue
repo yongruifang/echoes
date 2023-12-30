@@ -3,9 +3,13 @@ import { ref, onMounted } from 'vue'
 import { fetchRegisterApi } from '@/api/user'
 const name = ref('')
 const password = ref('')
-const emits = defineEmits(['login', 'registerSuccess'])
+const emits = defineEmits(['login', 'registerSuccess', 'failed'])
 const toggleRegister = async () => {
     const res = await fetchRegisterApi(name.value, password.value)
+    if (res.status !== 'success') {
+        emits('failed', res)
+        return
+    }
     console.log(res)
     // 通知父组件注册成功
     emits('registerSuccess')

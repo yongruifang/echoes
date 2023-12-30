@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 import { fetchUpdateMessageApi, fetchDeleteMessageApi } from '@/api/echo'
 import { useEchoStore } from '@/stores/echo';
 const echoStore = useEchoStore()
-const emits = defineEmits(['update:success', 'remove:success'])
+const emits = defineEmits(['update:success', 'remove:success', 'failed'])
 interface Msg {
     _id: string;
     color: string;
@@ -65,6 +65,8 @@ const update = async () => {
         // 更新store
         echoStore.updateEcho(message)
         emits('update:success')
+    } else {
+        emits('failed', res)
     }
 }
 const remove = async () => {
@@ -77,6 +79,8 @@ const remove = async () => {
             // 更新store
             echoStore.deleteEcho(props._id)
             emits('remove:success')
+        } else {
+            emits('failed', res)
         }
     }
 }
