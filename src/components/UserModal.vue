@@ -23,7 +23,8 @@ const type = ref('login')
     width: 100%;
     height: 100%;
     background: rgba(115, 115, 115, 0.5);
-    z-index: 1;
+    backdrop-filter: blur(5px);
+    z-index: 800;
     display: none;
     transition: all 0.3s ease;
 }
@@ -38,7 +39,7 @@ const type = ref('login')
     top: -150%;
     transform: translate(-50%, -50%) scale(1.15);
     background: #fff;
-    z-index: 2;
+    z-index: 801;
     opacity: 0;
     width: 300px;
     height: 450px;

@@ -6,6 +6,7 @@ import EditCardForm from '@/components/form/EditCardForm.vue';
 import { ref, onMounted } from 'vue';
 import { fetchMessageListApi } from '@/api/echo'
 import { useEchoStore } from '@/stores/echo'
+import EchoAlert from '@/components/common/EchoAlert.vue';
 const openModal = ref(false);
 const newModal = () => {
   openModal.value = true;
@@ -65,6 +66,8 @@ onMounted(() => {
     fetchMessageListApi({ limit: 20, offset: 0 }).then((res) => {
       console.log(res.data)
       echoStore.setEchoes(res.data)
+    }).catch((err) => {
+      console.log(err)
     })
   }
   // debounce
@@ -138,6 +141,9 @@ onMounted(() => {
       </div>
     </template>
   </EchoModal>
+  <Teleport to="#notification">
+    <EchoAlert :show=true type="error" message="hello"></EchoAlert>
+  </Teleport>
 </template>
 <style scoped>
 .fixed {

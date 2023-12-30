@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import UserModal from '@/components/UserModal.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { Icon } from '@iconify/vue'
-defineProps({
+const props = defineProps({
     active: {
         type: String,
         default: '/'
+    },
+    logged: {
+        type: Boolean,
+        default: false
     }
 })
-const openUserModal = ref(false)
+const openUserModal = ref(props.logged)
 const userStore = useUserStore()
 // 计算属性，根据userStore的token判断是否登录
 const isLogin = computed(() => {
@@ -30,6 +34,11 @@ const clickAvatar = () => {
     }
 }
 const expandMenu = ref(false)
+onMounted(() => {
+    if (props.logged === false) {
+        openUserModal.value = true
+    }
+})
 </script>
 <template>
     <header>
@@ -193,7 +202,7 @@ li:hover {
 
 .dropdown {
     position: absolute;
-    top: 80px;
+    top: 71px;
     left: 0;
     width: 100%;
     background-color: #fff;
