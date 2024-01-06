@@ -17,6 +17,7 @@ const props = defineProps({
         default: false
     }
 })
+const showOverlay = ref(false)
 const openUserModal = ref(props.logged)
 const userStore = useUserStore()
 // 计算属性，根据userStore的token判断是否登录
@@ -24,6 +25,10 @@ const isLogin = computed(() => {
     const { token } = storeToRefs(userStore)
     return token.value !== ''
 })
+const hidePanel = () => {
+    showOverlay.value = false
+    expandMenu.value = false
+}
 const clickAvatar = () => {
     if (isLogin.value) {
         // 浏览器原生的confirm弹窗
@@ -37,6 +42,10 @@ const clickAvatar = () => {
     }
 }
 const expandMenu = ref(false)
+const toggleExpand = () => {
+    expandMenu.value = !expandMenu.value
+    showOverlay.value = !showOverlay.value
+}
 onMounted(() => {
     if (props.logged === false) {
         openUserModal.value = true
@@ -50,7 +59,7 @@ onMounted(() => {
         <nav class="nav-bar">
             <div class="nav-header">
                 <div class="logo"><img alt="Echo logo" src="@/assets/echo.svg" width="100" height="50" /></div>
-                <Icon icon="carbon:menu" class="toggle-expand" @click="expandMenu = !expandMenu"></Icon>
+                <Icon icon="carbon:menu" class="toggle-expand" @click="toggleExpand"></Icon>
             </div>
             <ul class="nav-element">
                 <li :class="active === '/' ? 'active' : ''">
@@ -87,6 +96,9 @@ onMounted(() => {
                     </li>
                 </ul>
             </div>
+            <Teleport to="#overlay">
+                <div class="overlay" :class="showOverlay ? 'active' : ''" @click="hidePanel"></div>
+            </Teleport>
         </nav>
     </header>
     <UserModal :openUserModal="openUserModal" @close="openUserModal = false" />
@@ -96,7 +108,22 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 799;
+    z-index: 750;
+}
+
+.overlay {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    z-index: 700;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.overlay.active {
+    display: block;
 }
 
 .nav-bar {

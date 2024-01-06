@@ -8,6 +8,8 @@ interface Message {
     content: string,
     from: string,
     tag: string,
+    likes: number,
+    comments: number,
 }
 
 export const useEchoStore = defineStore('echo', () => {
@@ -34,5 +36,9 @@ export const useEchoStore = defineStore('echo', () => {
     function setActiveId(id: string) {
         activeId.value = id;
     }
-    return { activeId, echoes, setEchoes, appendEchoes, updateEcho, deleteEcho, setActiveId }
+    function incrComment(id: string | undefined) {
+        const index = echoes.value.findIndex((item) => item._id === id)
+        echoes.value[index].comments++;
+    }
+    return { activeId, echoes, setEchoes, appendEchoes, updateEcho, deleteEcho, setActiveId, incrComment }
 })

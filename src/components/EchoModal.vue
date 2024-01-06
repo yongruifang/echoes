@@ -42,6 +42,7 @@ const closeStyle = 'transform: translateX(100%);'
     background-color: #fff;
     transition: transform 0.3s ease-in-out;
     overflow-y: auto;
+    z-index: 900;
 }
 
 .modal-header {
@@ -62,5 +63,6 @@ const closeStyle = 'transform: translateX(100%);'
 
 .modal-content {
     overflow: hidden;
+    height: calc(100% - 50px);
 }
 </style>

@@ -13,8 +13,10 @@ const memberLogin = async () => {
         emits('failed', res)
         return
     }
-    userStore.setName(name.value)
-    userStore.setToken(res.token)
+    userStore.setId(res.user._id)
+    userStore.setName(res.user.name)
+    userStore.setToken(res.user.token)
+    userStore.setLikeset(res.user.likeset)
     // 通知父组件登录成功
     emits('loginSuccess')
 }

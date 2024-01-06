@@ -1,10 +1,11 @@
-const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api/v1';
+const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api/';
 import { useUserStore } from '@/stores/user';
 const userStore = useUserStore()
-const addMessageApi = `${baseUrl}/message/add`;
-const getMessageListApi = `${baseUrl}/message/list`
-const updateMessageApi = `${baseUrl}/message/update`;
-const deleteMessageApi = `${baseUrl}/message/delete`;
+const addMessageUrl = `${baseUrl}/message/add`;
+const getMessageUrl = `${baseUrl}/message/list`
+const updateMessageUrl = `${baseUrl}/message/update`;
+const deleteMessageUrl = `${baseUrl}/message/delete`;
+const likeMessageUrl = `${baseUrl}/message/like`;
 interface Message {
     _id?: string,
     color: string,
@@ -14,7 +15,7 @@ interface Message {
     tag: string,
 }
 export const fetchAddMessageApi = async (message: Message) => {
-    const res = await fetch(addMessageApi, {
+    const res = await fetch(addMessageUrl, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -26,7 +27,7 @@ export const fetchAddMessageApi = async (message: Message) => {
     return res.json();
 }
 export const fetchUpdateMessageApi = async (message: Message) => {
-    const res = await fetch(updateMessageApi, {
+    const res = await fetch(updateMessageUrl, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -48,7 +49,7 @@ interface getListQuery {
  */
 export const fetchMessageListApi = async (query: getListQuery) => {
     const { limit, offset } = query;
-    const res = await fetch(`${getMessageListApi}?limit=${limit}&offset=${offset}`, {
+    const res = await fetch(`${getMessageUrl}?limit=${limit}&offset=${offset}`, {
         method: 'GET',
         mode: 'cors',
     })
@@ -56,7 +57,17 @@ export const fetchMessageListApi = async (query: getListQuery) => {
 }
 
 export const fetchDeleteMessageApi = async (id: string) => {
-    const res = await fetch(`${deleteMessageApi}?_id=${id}`, {
+    const res = await fetch(`${deleteMessageUrl}?_id=${id}`, {
+        method: 'GET',
+        mode: 'cors',
+    })
+    return res.json();
+}
+
+export const fetchLikeMessageApi = async (id: string) => {
+    const mid = id;
+    const uid = userStore._id;
+    const res = await fetch(`${likeMessageUrl}?mid=${mid}&uid=${uid}`, {
         method: 'GET',
         mode: 'cors',
     })

@@ -11,10 +11,6 @@ router.beforeEach((to) => {
 const checkLogin = () => {
   if (userStore.token) {
     return true
-  } else if (localStorage.getItem('token')) {
-    userStore.setToken(localStorage.getItem('token')!)
-    userStore.setName(localStorage.getItem('name')!)
-    return true
   }
   return false
 }
