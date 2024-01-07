@@ -165,9 +165,9 @@ onMounted(() => {
   function throttle(func: any, wait: number) {
     let timeout: number | null, result: any
     return function (this: any) {
-      const args: any[] = [...arguments]
       if (!timeout) {
-        console.debug(args, wait)
+        // const args: any[] = [...arguments]
+        // console.debug(args, wait)
         timeout = setTimeout(() => {
           //'this' implicitly has type 'any' because it does not have a type annotation
           // this:any

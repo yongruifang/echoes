@@ -157,7 +157,7 @@ watch(() => props._id, () => {
 
 .discuss-content {
     max-height: 250px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .discuss-footer {
