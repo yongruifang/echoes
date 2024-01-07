@@ -10,6 +10,7 @@ const handleChange = (event: any) => {
     const form = new FormData()
     // append(): used to add a key/value pair to the FormData object
     form.append("pic", file)
+    console.log("fileSize", file.size)
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = (e) => {

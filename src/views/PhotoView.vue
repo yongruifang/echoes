@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import AddPicForm from '@/components/form/AddPicForm.vue'
+import EchoPhoto from '@/components/EchoPhoto.vue';
 import { onMounted, ref } from 'vue';
 import { fetchPicListApi } from '@/api/picture';
-const showModal = ref(true)
+const showModal = ref(false)
 const baseUrl = import.meta.env.VITE_S3_BUCKET_BASE_URL
 interface picture {
-    url: string
+    _id: string,
+    url: string,
+    time: string,
+    likes: number,
 }
 const picList = ref<picture[]>([])
 const toggleAdd = () => {
@@ -15,11 +19,14 @@ const toggleAdd = () => {
 const getPicList = async () => {
     console.log('trigger getPicList')
     const res = await fetchPicListApi()
-    console.log(res.data.Contents)
-    res.data.Contents.forEach((content: any) => {
+    console.log(res)
+    res.data?.forEach((content: any) => {
         for (let i = 0; i < 10; i++)
             picList.value.push({
-                url: baseUrl + content.Key,
+                url: baseUrl + content.url,
+                time: content.time,
+                likes: content.likes,
+                _id: content._id
             })
     })
 }
@@ -37,7 +44,8 @@ onMounted(() => {
         </div>
         <div class="pic-grid">
             <div class="pic-item" v-for="pic in picList" :key="pic.url">
-                <img :src="pic.url" alt="" />
+                <!-- <img :src="pic.url" alt="" /> -->
+                <EchoPhoto :url="pic.url" :likes="pic.likes" :time="pic.time" :_id="pic._id" />
             </div>
         </div>
     </div>
@@ -56,9 +64,14 @@ onMounted(() => {
 }
 
 .add-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background: none;
     width: 30px;
     height: 30px;
+    border: 2px solid red;
+    color: red;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -83,11 +96,10 @@ onMounted(() => {
 .pic-item {
     margin-bottom: 10px;
     break-inside: avoid;
-
-    img {
-        width: 100%;
-        border-radius: 5px;
-    }
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media(max-width: 768px) {

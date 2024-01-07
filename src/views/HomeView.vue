@@ -161,45 +161,46 @@ onMounted(() => {
   //   }
   // }
   // 显然防抖并不适合
-  // throttle
-  function throttle(func: any, wait: number) {
-    let timeout: number | null, result: any
-    return function (this: any) {
-      if (!timeout) {
-        // const args: any[] = [...arguments]
-        // console.debug(args, wait)
-        timeout = setTimeout(() => {
-          //'this' implicitly has type 'any' because it does not have a type annotation
-          // this:any
-          result = func.apply(this.args)
-          timeout = null
-        }, wait);
-      }
-      return result
-    }
-  }
-  const infiniteScroll = async () => {
-    const container = document.getElementsByClassName('card-plane')[0]
-    const distance = container.getBoundingClientRect().bottom - window.innerHeight;
-    if (!isLoading.value && !isEnd.value && distance < triggerDistance) {
-      isLoading.value = true;
-      console.log('fetching...')
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('')
-        }, 3000);
-      })
-      const res = await fetchMessageListApi({ limit: 20, offset: echoStore.echoes.length })
-      if (res.data.length === 0) isEnd.value = true;
-      echoStore.appendEchoes(res.data)
-      isLoading.value = false;
-      if (res.status === 'error') {
-        openAlert({ type: "error", message: res.message, show: true, autoClose: false })
-      }
-    }
-  }
-  window.addEventListener('scroll', throttle(infiniteScroll, 50))
 })
+// throttle
+function throttle(func: any, wait: number) {
+  let timeout: number | null, result: any
+  return function (this: any) {
+    if (!timeout) {
+      // const args: any[] = [...arguments]
+      // console.debug(args, wait)
+      timeout = setTimeout(() => {
+        //'this' implicitly has type 'any' because it does not have a type annotation
+        // this:any
+        result = func.apply(this.args)
+        timeout = null
+      }, wait);
+    }
+    return result
+  }
+}
+const infiniteScroll = async () => {
+  const container = document.getElementsByClassName('card-plane')[0]
+  if (!container) return
+  const distance = container.getBoundingClientRect().bottom - window.innerHeight;
+  if (!isLoading.value && !isEnd.value && distance < triggerDistance) {
+    isLoading.value = true;
+    console.log('fetching...')
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('')
+      }, 3000);
+    })
+    const res = await fetchMessageListApi({ limit: 20, offset: echoStore.echoes.length })
+    if (res.data.length === 0) isEnd.value = true;
+    echoStore.appendEchoes(res.data)
+    isLoading.value = false;
+    if (res.status === 'error') {
+      openAlert({ type: "error", message: res.message, show: true, autoClose: false })
+    }
+  }
+}
+window.addEventListener('scroll', throttle(infiniteScroll, 50))
 </script>
 
 <template>

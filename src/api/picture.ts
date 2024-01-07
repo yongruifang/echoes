@@ -7,12 +7,9 @@ export const fetchAddPicApi = async (pic: any) => {
     const res = await fetch(addPicUrl, {
         method: 'POST',
         mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         body: pic
     })
-    return res.json();
+    return res;
 }
 export const fetchPicListApi = async () => {
     const res = await fetch(`${getPicUrl}`, {
