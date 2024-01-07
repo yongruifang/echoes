@@ -7,17 +7,23 @@ const handleChange = (event: any) => {
     const file = event.files[0]
     fileName.value = file.name
     const form = new FormData()
-    form.append("upload_preset", "")
+    // append(): used to add a key/value pair to the FormData object
+    form.append("pic", file)
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = (e) => {
         preview.value = e.target?.result as string
-        form.append("file", preview.value)
     }
     formData.value = form
 }
-const upload = () => {
-    console.log(formData.value)
+const upload = async () => {
+    console.log('trigger upload')
+    const res = await fetch('http://localhost:3000/api/photo/add', {
+        method: 'POST',
+        body: formData.value
+    })
+    const data = await res.json()
+    console.log(data)
 }
 </script>
 
