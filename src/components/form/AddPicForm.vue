@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { fetchAddPicApi } from '@/api/picture'
 const preview = ref('')
 const fileName = ref('')
 const formData = ref()
@@ -18,10 +19,7 @@ const handleChange = (event: any) => {
 }
 const upload = async () => {
     console.log('trigger upload')
-    const res = await fetch('http://localhost:3000/api/photo/add', {
-        method: 'POST',
-        body: formData.value
-    })
+    const res = await fetchAddPicApi(formData.value)
     const data = await res.json()
     console.log(data)
 }
