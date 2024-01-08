@@ -93,8 +93,8 @@ const hidePanel = () => {
 }
 
 const echoStore = useEchoStore()
-const uploadSuccess = () => {
-  if (isEnd.value) isEnd.value = false;
+const uploadSuccess = async () => {
+  fetchData()
   alertStore.setAlert({ type: 'success', message: '上传成功', show: true, autoClose: true })
 }
 const updateSuccess = () => {
@@ -178,6 +178,11 @@ function throttle(func: any, wait: number) {
     return result
   }
 }
+const fetchData = async () => {
+  const res = await fetchMessageListApi({ limit: 20, offset: echoStore.echoes.length })
+  echoStore.appendEchoes(res.data)
+  return res
+}
 const infiniteScroll = async () => {
   const container = document.getElementsByClassName('card-plane')[0]
   if (!container) return
@@ -190,9 +195,8 @@ const infiniteScroll = async () => {
         resolve('')
       }, 3000);
     })
-    const res = await fetchMessageListApi({ limit: 20, offset: echoStore.echoes.length })
+    const res = await fetchData()
     if (res.data.length === 0) isEnd.value = true;
-    echoStore.appendEchoes(res.data)
     isLoading.value = false;
     if (res.status === 'error') {
       openAlert({ type: "error", message: res.message, show: true, autoClose: false })

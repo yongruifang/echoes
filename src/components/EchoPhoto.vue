@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import { computed } from 'vue';
 const emits = defineEmits(['view'])
 const props = defineProps({
     _id: {
+        type: String,
+        default: ''
+    },
+    name: {
         type: String,
         default: ''
     },
@@ -16,6 +21,11 @@ const props = defineProps({
     likes: {
         type: Number
     }
+})
+const decodedUrl = computed(() => {
+    const decoded = decodeURIComponent(props.name)
+    const dotLastIndex = decoded.lastIndexOf('-')
+    return decoded.slice(0, dotLastIndex)
 })
 const toggleLike = async (e: Event) => {
     console.log('toggleLike')
@@ -42,7 +52,7 @@ const toggleModal = (e: Event) => {
         </div>
         <div class="img-footer">
             <p style="text-align: center;">{{ props.time?.slice(0, 10) }}</p>
-            <p style="text-align: center;">{{ props._id }}</p>
+            <p style="text-align: center;">{{ decodedUrl }}</p>
         </div>
     </div>
 </template>
@@ -57,7 +67,7 @@ const toggleModal = (e: Event) => {
         left: 50%;
         transform: translateX(-50%);
         width: 90%;
-        max-width: 250x;
+        max-width: 250px;
         border: 1px solid black;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { fetchAddPicApi } from '@/api/picture'
 import { useAlertStore } from '@/stores/alert';
-import { time } from 'console';
 const alertStore = useAlertStore()
 const preview = ref('')
 const fileName = ref('')
