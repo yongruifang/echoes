@@ -142,7 +142,6 @@ const triggerDistance = 200;
 onMounted(() => {
   if (echoStore.echoes.length === 0) {
     fetchMessageListApi({ limit: 20, offset: 0 }).then((res) => {
-      console.log(res.data)
       echoStore.setEchoes(res.data)
     }).catch((err) => {
       openAlert({ type: "error", message: err.message, show: true, autoClose: false })

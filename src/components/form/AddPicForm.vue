@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { fetchAddPicApi } from '@/api/picture'
+import { useAlertStore } from '@/stores/alert';
+import { time } from 'console';
+const alertStore = useAlertStore()
 const preview = ref('')
 const fileName = ref('')
 const formData = ref()
+const emits = defineEmits(['upload'])
+const loading = ref(false)
+const submitRef = ref()
 const handleChange = (event: any) => {
     const file = event.files[0]
     fileName.value = file.name
@@ -19,10 +25,20 @@ const handleChange = (event: any) => {
     formData.value = form
 }
 const upload = async () => {
-    console.log('trigger upload')
+    console.log('trigger upload, 先禁用按钮')
+    submitRef.value.disabled = true
+    loading.value = true
+    console.log(formData.value)
     const res = await fetchAddPicApi(formData.value)
-    const data = await res.json()
-    console.log(data)
+    alertStore.setAlert({
+        type: 'success',
+        message: '上传成功',
+        show: true,
+        autoClose: true,
+    })
+    emits('upload')
+    console.log(res)
+    loading.value = false;
 }
 </script>
 
@@ -51,7 +67,8 @@ const upload = async () => {
                 </div>
             </div>
         </div>
-        <button class="upload-btn" @click="upload">上传</button>
+        <button v-show="!loading" class="upload-btn" @click="upload" ref="submitRef">上传</button>
+        <p v-show="loading" style="text-align: center;">正在上传中...</p>
     </div>
 </template>
 <style scoped>
@@ -138,5 +155,9 @@ const upload = async () => {
     color: red;
     border: 2px solid red;
     cursor: pointer;
+}
+
+.upload-btn[disabled] {
+    cursor: not-allowed;
 }
 </style>

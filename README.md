@@ -60,6 +60,11 @@
 
 - 点赞时，有一些操作需要注意。图标的预加载。
 
+# 疑点：传送文件名有中文时，添加到桶里的图片访问不到（报403拒绝访问）
+> User-defined metadata is a set of key-value pairs. Amazon S3 存储 user-defined metadata keys in lowercase. Each key-value pair must conform to US-ASCII when using REST and UTF-8 when using SOAP or browser-based uploads via POST.
+
+
+
 # 创新点
 - kafka, rabbitMQ
 - Socket.io 搞一个聊天室

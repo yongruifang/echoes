@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+const emits = defineEmits(['view'])
 const props = defineProps({
     _id: {
         type: String,
@@ -23,6 +24,7 @@ const toggleLike = async (e: Event) => {
 }
 const toggleModal = (e: Event) => {
     console.log('toggleModal')
+    emits('view')
     //@TODO: 开发图片浏览插件
     //@TODO: 复用评论模块
     e.stopPropagation();

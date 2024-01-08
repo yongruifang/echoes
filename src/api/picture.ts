@@ -9,10 +9,14 @@ export const fetchAddPicApi = async (pic: any) => {
         mode: 'cors',
         body: pic
     })
-    return res;
+    return res.json();
 }
-export const fetchPicListApi = async () => {
-    const res = await fetch(`${getPicUrl}`, {
+export const fetchPicListApi = async (query: {
+    limit: number,
+    offset: number
+}) => {
+    const { limit, offset } = query;
+    const res = await fetch(`${getPicUrl}?limit=${limit}&offset=${offset}`, {
         method: 'GET',
         mode: 'cors',
     })

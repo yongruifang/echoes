@@ -1713,6 +1713,11 @@ vue-demi@>=0.14.5, vue-demi@>=0.14.6:
   resolved "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.14.6.tgz#dc706582851dc1cdc17a0054f4fec2eb6df74c92"
   integrity sha512-8QA7wrYSHKaYgUxDA5ZC24w+eHm3sYCbp0EzcDwKqN3p6HqtTCGR/GVsPyZW92unff4UlcSh++lmqDWN3ZIq4w==
 
+vue-easy-lightbox@^1.17.0:
+  version "1.17.0"
+  resolved "https://registry.npmmirror.com/vue-easy-lightbox/-/vue-easy-lightbox-1.17.0.tgz#f2678a71b0969d47be8830372d81d6cfeca3c0f4"
+  integrity sha512-dPkfNzcXQmiG7neNjJ9pDoWXWncOriVn9I/R7E8reEuRJ2GGScEcGB/fEtoqFnbcFzWYYPlcPGLc7q556nhHGQ==
+
 vue-eslint-parser@^9.3.1:
   version "9.3.2"
   resolved "https://registry.npmmirror.com/vue-eslint-parser/-/vue-eslint-parser-9.3.2.tgz#6f9638e55703f1c77875a19026347548d93fd499"
