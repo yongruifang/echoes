@@ -8,7 +8,10 @@ export const fetchAddPicApi = async (pic: any) => {
     const res = await fetch(addPicUrl, {
         method: 'POST',
         mode: 'cors',
-        body: pic
+        body: pic,
+        headers: {
+            'authorization': userStore.token
+        },
     })
     return res.json();
 }
@@ -20,10 +23,6 @@ export const fetchPicListApi = async (query: {
     const res = await fetch(`${getPicUrl}?limit=${limit}&offset=${offset}`, {
         method: 'GET',
         mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'authorization': userStore.token
-        },
     })
     return res.json();
 }
