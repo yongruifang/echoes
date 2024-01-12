@@ -23,7 +23,6 @@ const isLoading = ref(false)
 const isEnd = ref(false)
 const imgsRef = computed(() => {
     const arr = picStore.pictures.map((pic: picture) => baseURL + pic.url)
-    console.log(arr)
     return arr;
 })
 const indexRef = ref(0)
@@ -113,7 +112,7 @@ window.addEventListener('scroll', throttle(infiniteScroll, 50))
             <h2>照片墙</h2>
         </div>
         <div class="content">
-            多列布局+瀑布流
+            <!-- 多列布局+瀑布流 -->
         </div>
         <div class="pic-grid">
             <div class="pic-item" v-for="(pic, index) in picStore.pictures" :key="pic.url">
@@ -178,7 +177,7 @@ window.addEventListener('scroll', throttle(infiniteScroll, 50))
 
 .pic-grid {
     /* column-count: 4; */
-    column-width: 250px;
+    column-width: 400px;
     column-gap: 13px;
     column-fill: balance;
     box-sizing: border-box;
@@ -193,17 +192,17 @@ window.addEventListener('scroll', throttle(infiniteScroll, 50))
     align-items: center;
 }
 
-/* @media(max-width: 768px) {
+@media(max-width: 768px) {
     .pic-grid {
-        column-count: 3;
+        column-width: 300px;
     }
 }
 
 @media(max-width: 576px) {
     .pic-grid {
-        column-count: 2;
+        column-width: 250px;
     }
-} */
+}
 
 .loading-spinner {
     margin-top: 20px;
