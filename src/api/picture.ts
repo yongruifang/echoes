@@ -10,6 +10,7 @@ export const fetchAddPicApi = async (pic: any) => {
         mode: 'cors',
         body: pic,
         headers: {
+            'Content-Type': 'application/json',
             'authorization': userStore.token
         },
     })
