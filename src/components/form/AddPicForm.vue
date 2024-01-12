@@ -30,8 +30,8 @@ const upload = async () => {
     console.log(formData.value)
     const res = await fetchAddPicApi(formData.value)
     alertStore.setAlert({
-        type: 'success',
-        message: '上传成功',
+        type: res.status,
+        message: res.status === "error"? res.message : '上传成功',
         show: true,
         autoClose: true,
     })
