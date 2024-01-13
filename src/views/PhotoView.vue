@@ -109,10 +109,10 @@ window.addEventListener('scroll', throttle(infiniteScroll, 50))
 <template>
     <div class="photo-plane">
         <div class="header">
-            <h2>照片墙</h2>
+
         </div>
         <div class="content">
-            <!-- 多列布局+瀑布流 -->
+
         </div>
         <div class="pic-grid">
             <div class="pic-item" v-for="(pic, index) in picStore.pictures" :key="pic.url">

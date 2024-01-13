@@ -90,7 +90,6 @@ onMounted(()=>{
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        aspect-ratio: 1 / 1;
         border: 1px solid black;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -101,6 +100,7 @@ onMounted(()=>{
 
     .blur-load{
         width: 100%;
+        position: relative;
         background-size: cover;
         background-position: center;
     }
@@ -110,27 +110,10 @@ onMounted(()=>{
         inset: 0;
         animation: pulse 2.5s infinite;
         animation-timing-function: ease-in-out;
+        background-color: rgba(255,255,255,0.1);
     }
     .blur-load.loaded::before{
-        /* content: none; */
-        background-color: rgba(255,255,255);
-    }
-    @keyframes pulse {
-        0% {
-            background-color: rgba(255,255,255,0);
-        }
-        25% {
-            background-color: rgba(255,255,255,0.2);
-        }
-        50% {
-            background-color: rgba(255,255,255,0.6);
-        }
-        75% {
-            background-color: rgba(255,255,255,0.2);
-        }
-        100% {
-            background-color: rgba(255,255,255,0);
-        }
+        content: none;
     }
 
     .blur-load.loaded > img{
@@ -141,6 +124,17 @@ onMounted(()=>{
         transition: opacity 200ms ease-in-out;
     }
 }
+@keyframes pulse {
+        0% {
+            background-color: rgba(255,255,255,0.1);;
+        }
+        50% {
+            background-color: rgba(255,255,255,0.3);;
+        }
+        100% {
+            background-color: rgba(255,255,255,0.1);;
+        }
+    }
 @media(max-width: 768px) {
     .echo-img {
         width: 300px;
